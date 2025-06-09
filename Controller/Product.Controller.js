@@ -203,9 +203,6 @@ let Productcontroller = {
     },
     GetSingleProduct: async (request, response) => {
         let { pid } = request.params;
-
-
-
         try {
             let singleproduct = await ProductModel.findOne({ _id: pid });
 

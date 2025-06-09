@@ -126,58 +126,63 @@ const UserController = {
 
     },
     Signin: async (request, response) => {
-        if (!request.body.Email) {
-            return response.status(400).json({
-                message: "Please fill the fields",
-                field: "Email"
+    if (!request.body.Email) {
+        return response.status(400).json({
+            message: "Please fill the fields",
+            field: "Email"
+        });
+    }
+
+    if (!request.body.Password) {
+        return response.status(400).json({
+            message: "Please fill the fields",
+            field: "Password"
+        });
+    }
+
+    try {
+        let isExist = await UserModel.findOne({ Email: request.body.Email });
+        if (!isExist) {
+            return response.status(404).json({
+                message: "Please First Signup",
+                field: "Email",
             });
         }
 
-        if (!request.body.Password) {
-            return response.status(400).json({
-                message: "Please fill the fields",
+        let ValidPassword = await bcrypt.compare(request.body.Password, isExist.Password);
+
+        if (!ValidPassword) {
+            return response.status(401).json({
+                message: "invaild Password",
                 field: "Password"
             });
         }
 
-        try {
-            let isExist = await UserModel.findOne({ Email: request.body.Email });
-            if (!isExist) {
-                return response.status(404).json({
-                    message: "Please First Signup",
-                    field: "Email",
-                });
-            }
+        let { Password, ...rest } = isExist._doc;
+        const { token } = createOTPandTOken({ ...rest }, process.env.SigninPrivateKey, "7d");
 
-            let ValidPassword = await bcrypt.compare(request.body.Password, isExist.Password);
-
-            if (!ValidPassword) {
-                return response.status(401).json({
-                    message: "invaild Password",
-                    field: "Password"
-                });
-            }
-
-            let { Password, ...rest } = isExist._doc;
-            const { token } = createOTPandTOken({ ...rest }, process.env.SigninPrivateKey, "7d");
-
-            if (!token) {
-                return response.status(400).json({
-                    message: "Invalid Token"
-                });
-            }
-
-            return response.cookie("Access_Token", token,{httpOnly:true,maxAage:604800000}).status(200).json({
-                message: "Login Successfull",
-                ...rest
-            });
-
-        } catch (error) {
-            return response.status(500).json({
-                message: error.message
+        if (!token) {
+            return response.status(400).json({
+                message: "Invalid Token"
             });
         }
-    },
+
+        return response.cookie("Access_Token", token, {
+            httpOnly: true,
+            maxAge: 604800000,  // 7 days in milliseconds
+            sameSite: "lax",    // local dev ke liye sahi hai
+            secure: false       // local dev me false rakhna
+        }).status(200).json({
+            message: "Login Successfull",
+            ...rest
+        });
+
+    } catch (error) {
+        return response.status(500).json({
+            message: error.message
+        });
+    }
+},
     ForgetPasswordEmailVerify: async (request, response) => {
         if (!request.body.Email) {
             return response.status(400).json({
