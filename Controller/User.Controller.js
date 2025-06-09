@@ -167,7 +167,7 @@ const UserController = {
                 });
             }
 
-            return response.cookie("Access_Token", token,{httpOnly:true,maxAage:604800000}).status(200).json({
+            return response.cookie("Access_Token", token,{httpOnly:true,maxAage:604800000,secure: true,sameSite: "none",}).status(200).json({
                 message: "Login Successfull",
                 ...rest
             });
