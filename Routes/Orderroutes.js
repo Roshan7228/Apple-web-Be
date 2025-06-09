@@ -6,7 +6,7 @@ const isAdmin = require("../Middleware/Admin");
 
 
 let OrderRoutes = express.Router();
-OrderRoutes.post("/orderplace/:userid/:pid", Auth, Ordercontroller.Orderplace);
+OrderRoutes.post("/orderplace/:userid/:pid",Auth, Ordercontroller.Orderplace);
 OrderRoutes.post("/create/:userid", Auth, Ordercontroller.Orderpost);
 OrderRoutes.get("/totalorder/:userid", Auth, Ordercontroller.TotalOrder);
 OrderRoutes.get("/amount/:userid", Auth, Ordercontroller.GetSubtotal);
