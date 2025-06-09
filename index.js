@@ -40,11 +40,11 @@ const startServer = async () => {
         console.log("✅ MongoDB connected");
 
         app.listen(process.env.PORT, () => {
-            console.log(`🚀 Server running on port ${process.env.PORT}`);
+            console.log(`Server running on port ${process.env.PORT}`);
         });
 
     } catch (error) {
-        console.error("❌ MongoDB connection failed:", error.message);
+        console.error("MongoDB connection failed:", error.message);
     }
 };
 
