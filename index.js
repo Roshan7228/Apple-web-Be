@@ -3,17 +3,14 @@ const connection = require("./Config/db");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-
-// Routes
 const Userroutes = require("./Routes/userroutes");
 const Productroute = require("./Routes/Productroutes");
 const Commentroute = require("./Routes/Commentroutes");
 const OrderRoutes = require("./Routes/Orderroutes");
 
 let app = express();
-app.set("view engine", "ejs");
 
-// Middlewares
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
@@ -22,22 +19,20 @@ app.use(cors({
 }));
 app.use(express.static("./UploadImage"));
 
-// Routes
+
 app.use("/api/users", Userroutes);
 app.use("/api/product", Productroute);
 app.use("/api/comment", Commentroute);
 app.use("/api/order", OrderRoutes);
 
-// Root route
 app.get("/", (req, res) => {
     res.send("<h1>API is Working......</h1>");
 });
 
-// ✅ Use this correct method to connect and start server
 const startServer = async () => {
     try {
-        await connection; // Wait for MongoDB connection first
-        console.log("✅ MongoDB connected");
+        await connection; 
+        console.log("MongoDB connected");
 
         app.listen(process.env.PORT, () => {
             console.log(`Server running on port ${process.env.PORT}`);
