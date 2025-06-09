@@ -36,8 +36,8 @@ let Productcontroller = {
                     description: request.body.description,
                     Price: request.body.Price,
                     image: images,
-                    Camera:request.body.Camera,
-                    FrontCamera:request.body.FrontCamera,
+                    Camera: request.body.Camera,
+                    FrontCamera: request.body.FrontCamera,
                     releasedate: request.body.releasedate,
                     space: {
                         display: request.body.display,
@@ -45,7 +45,7 @@ let Productcontroller = {
                         storage: request.body.storage,
                         bettery: request.body.bettery,
                         otherfeature: request.body.otherfeature,
-                        sortdescription:request.body.sortdescription
+                        sortdescription: request.body.sortdescription
                     },
                     color: request.body.color
                 });
@@ -148,8 +148,8 @@ let Productcontroller = {
             return response.status(500).json({ message: error.message });
         }
     },
-    Delete:async (request,response)=>{
-         let { userid, pid } = request.params;
+    Delete: async (request, response) => {
+        let { userid, pid } = request.params;
 
         if (!userid || !pid) {
             return response.status(400).json({ message: "You are not authorized" });
@@ -160,68 +160,68 @@ let Productcontroller = {
         }
 
         try {
-            let Deleteproduct=await ProductModel.findByIdAndDelete({_id:pid})
-            if(!Deleteproduct){
+            let Deleteproduct = await ProductModel.findByIdAndDelete({ _id: pid })
+            if (!Deleteproduct) {
                 return response.status(400).json({
-                    message:"Product Not Found"
+                    message: "Product Not Found"
                 })
             }
             return response.status(200).json({
-                message:"Product Delete Successfully"
+                message: "Product Delete Successfully"
             })
-            
+
         } catch (error) {
             return response.status(500).json({
-                message:error.message
+                message: error.message
             })
         }
     },
-    AllProductget: async(request,response)=>{
-        let limit=request.query.limit || null;
-        let order=request.query.order || "ace";
-        let search= request.query.search || "";
-        let page=request.query.page || null;
+    AllProductget: async (request, response) => {
+        let limit = request.query.limit || null;
+        let order = request.query.order || "ace";
+        let search = request.query.search || "";
+        let page = request.query.page || null;
         try {
             let query = { name: { $regex: search, $options: "i" } };
-            let Allproduct=await ProductModel.find(query).limit(limit).sort({createdAt:order=='desc'?-1:1}).skip(page);
-             if (!Allproduct || Allproduct.length == 0) {
+            let Allproduct = await ProductModel.find(query).limit(limit).sort({ createdAt: order == 'desc' ? -1 : 1 }).skip(page);
+            if (!Allproduct || Allproduct.length == 0) {
                 return response.status(400).json({
                     message: "Post Not Found"
                 });
             }
             return response.status(200).json({
-                message:"All Product",
+                message: "All Product",
                 Allproduct
             })
 
-            
+
         } catch (error) {
-             return response.status(500).json({
-                message:error.message
-             })
+            return response.status(500).json({
+                message: error.message
+            })
         }
     },
-    GetSingleProduct:async (request,response)=>{
-          let { pid } = request.params;
+    GetSingleProduct: async (request, response) => {
+        let { pid } = request.params;
 
-      
+
 
         try {
-           let singleproduct=await ProductModel.findOne({_id:pid});
-           
-           if(!singleproduct){
-            return response.status(400).json({
-                message:"Product Not Found"
+            let singleproduct = await ProductModel.findOne({ _id: pid });
+
+            if (!singleproduct) {
+                return response.status(400).json({
+                    message: "Product Not Found"
+                })
+            }
+            return response.status(200).json({
+                message: "Product Fetch",
+                singleproduct
             })
-           }
-           return response.status(200).json({
-            message:"Product Fetch",
-            singleproduct
-           })
         } catch (error) {
-             return response.status(500).json({
-                message:error.message
-             })
+            return response.status(500).json({
+                message: error.message
+            })
         }
     }
 }
