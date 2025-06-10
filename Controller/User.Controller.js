@@ -70,13 +70,12 @@ const UserController = {
                     field: "Email"
                 });
             }
-
             let UserResult = await createOTPandTOken({ ...request.body }, process.env.PrivateKEY, "5m");
 
             let MailHTMLTemplte = await ejs.renderFile(__dirname + "/../views/Email.ejs", { OTP: UserResult.OTP });
             await SendMail(MailHTMLTemplte, Email, "OTP Verification !");
 
-            return response.cookie("Verification_Token", UserResult.token).status(200).json({
+            return response.cookie("Verification_Token", UserResult.token,{httpOnly:true,secure:true,sameSite:"None"}).status(200).json({
                 message: "OTP sent on your email."
             });
         } catch (error) {
