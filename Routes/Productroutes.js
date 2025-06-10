@@ -10,6 +10,6 @@ Productroute.post("/create/:userid",Auth,isAdmin,upload.array("image",5),Product
 Productroute.patch("/update/:userid/:pid",Auth,isAdmin,upload.array('image',5),Productcontroller.Update);
 Productroute.delete("/deleta/:userid/:pid",Auth,isAdmin,Productcontroller.Delete);
 Productroute.get("/allproduct",Productcontroller.AllProductget);
-Productroute.get("/description/:userid/:pid",Productcontroller.GetSingleProduct);
+Productroute.get("/description/:pid",Productcontroller.GetSingleProduct);
 
 module.exports=Productroute

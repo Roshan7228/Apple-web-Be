@@ -14,7 +14,7 @@ let app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: ["http://localhost:5173", "http://localhost:5174","https://clever-gingersnap-b58ebb.netlify.app"],
+    origin: ["http://localhost:5173", "http://localhost:5174","https://effulgent-taffy-a669e3.netlify.app"],
     credentials: true
 }));
 app.use(express.static("./UploadImage"));
